@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf" content="{{ csrf }}">
+  <title>{% block title %}Inicio{% endblock %} · Aero Reef</title>
+  <link rel="icon" href="data:,">  <!-- sin icono de pestaña: evita un 404 en los registros -->
+  <link rel="stylesheet" href="/static/style.css?v={{ v }}">
+</head>
+<body>
+  <!-- Capas decorativas del fondo: cielo, luz del sol y destellos (solo CSS) -->
+  <div class="sky" aria-hidden="true"><i class="flare"></i><i class="swoosh"></i><i class="bokeh"></i></div>
+
+  <main class="app">
+    <header class="glass titlebar">
+      <span class="orb" aria-hidden="true"></span>
+      <div class="grow">
+        <h1>Aero Reef</h1>
+        <p>Acuario virtual</p>
+      </div>
+      {% if user %}
+      <form method="post" action="/logout" class="logout">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <span class="who">{{ user.email }}</span>
+        <button class="btn secondary" type="submit">Cerrar sesión</button>
+      </form>
+      {% endif %}
+    </header>
+    {% block content %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

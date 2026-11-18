@@ -1,0 +1,7 @@
+# Versiones fijas: compatibles con Python 3.10 a 3.13 (Ubuntu 22.04 y 24.04)
+fastapi==0.162.5
+starlette==1.7.0
+uvicorn==0.54.0
+jinja2==3.1.6
+itsdangerous==2.2.0
+python-multipart==0.0.32

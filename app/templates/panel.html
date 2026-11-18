@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Panel{% endblock %}
+{% block content %}
+<!-- Acuario: carcasa de lámpara acuario (solo CSS) con el canvas dentro (aquarium.js) -->
+<section class="lamp">
+  <div class="lamp-hood" aria-hidden="true"></div>
+  <div class="lamp-glass">
+    <canvas id="tank" role="img"
+      aria-label="Arrecife de coral con peces tropicales, burbujas y anémonas. Toca el agua para echar comida."></canvas>
+  </div>
+  <div class="lamp-base" aria-hidden="true"><span class="lamp-led"></span></div>
+</section>
+
+<aside class="glass panel">
+  <div class="controls">
+    <label for="species-select">Especie</label>
+    <select id="species-select" class="select"></select>
+    <div class="buttons">
+      <button id="btn-add" class="btn" type="button">Añadir pez</button>
+      <button id="btn-remove" class="btn secondary" type="button">Quitar pez</button>
+      <button id="btn-feed" class="btn secondary" type="button">Dar de comer</button>
+    </div>
+    <div class="buttons">
+      <button id="btn-light" class="btn secondary" type="button">Luz: ciclo automático</button>
+      <button id="btn-sound" class="btn secondary" type="button" aria-pressed="false">Activar sonido</button>
+    </div>
+    <p id="status" class="status" role="status"></p>
+  </div>
+  <div id="info" class="info" aria-live="polite"></div>
+  <h2 class="list-title">Peces en el acuario: <span id="count">0</span></h2>
+  <div id="fish-list" class="fish-list"></div>
+</aside>
+
+<!-- Dominios y alertas simulados -->
+<section class="glass monitor">
+  <div>
+    <h2>Dominios vigilados</h2>
+    <p class="note">Simulación: no se analizan dominios reales ni se hace ninguna petición de red.</p>
+    {% if flash %}<p class="status" role="status">{{ flash }}</p>{% endif %}
+    <form method="post" action="/dominios" class="inline-form">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label for="nombre">Dominio ficticio</label>
+      <div class="field-row">
+        <input id="nombre" name="nombre" class="input" required maxlength="253" placeholder="tienda.example.com">
+        <button class="btn" type="submit">Dar de alta</button>
+      </div>
+    </form>
+    <ul class="rows">
+      {% for d in domains %}
+      <li>
+        <span>{{ d.name }}</span>
+        <form method="post" action="/dominios/{{ d.id }}/borrar">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <button class="btn secondary small" type="submit">Quitar</button>
+        </form>
+      </li>
+      {% else %}
+      <li class="empty">Todavía no hay dominios. Da de alta el primero.</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div>
+    <h2>Alertas simuladas</h2>
+    <ul class="rows">
+      {% for a in alerts %}
+      <li><span class="sev {{ a.severity }}">{{ a.severity }}</span><span>{{ a.domain }}: {{ a.message }}</span></li>
+      {% else %}
+      <li class="empty">Sin alertas. Se generan al dar de alta un dominio.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/aquarium.js?v={{ v }}"></script>{% endblock %}

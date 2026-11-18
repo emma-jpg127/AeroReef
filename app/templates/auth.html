@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block content %}
+<section class="glass auth">
+  <h2>{{ titulo }}</h2>
+  {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+  <form method="post" action="{{ action }}">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label for="email">Correo (ficticio)</label>
+    <input id="email" name="email" type="email" class="input" required maxlength="254" autocomplete="username">
+    <label for="password">Contraseña{% if modo == 'registro' %} (mínimo 10 caracteres){% endif %}</label>
+    <input id="password" name="password" type="password" class="input" required
+           {% if modo == 'registro' %}minlength="10"{% endif %} maxlength="128"
+           autocomplete="{{ 'new-password' if modo == 'registro' else 'current-password' }}">
+    <button class="btn" type="submit">{{ titulo }}</button>
+  </form>
+  <p><a href="{{ alt_url }}">{{ alt_text }}</a></p>
+</section>
+{% endblock %}

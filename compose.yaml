@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    env_file: .env                 # SESSION_SECRET llega desde .env (fuera de Git)
+    environment:
+      DB_PATH: /data/aeroreef.db
+    ports:
+      - "127.0.0.1:8000:8000"      # solo accesible desde tu propio equipo
+    volumes:
+      - aeroreef-data:/data       # los datos sobreviven a reinicios
+    restart: unless-stopped
+    read_only: true                # sistema de archivos del contenedor de solo lectura
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  aeroreef-data:
